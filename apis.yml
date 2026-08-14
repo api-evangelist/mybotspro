@@ -2,25 +2,34 @@ aid: mybotspro
 name: Mybots.pro
 description: >-
   myBots (operated by Global AI Group, Inc.) builds enterprise AI sales and
-  support agents for messaging channels — WhatsApp, Instagram, Telegram, and web
-  chat. Each agent qualifies inbound leads, answers questions in the business's
-  brand voice, books appointments on a connected calendar (Calendly), and runs
-  24/7 across every messenger a company operates. It is a no-developer SaaS aimed
-  at business teams; as of this profile the product exposes no public API,
-  developer portal, OpenAPI definition, SDKs, or documented webhook surface.
-  Surfaced as a portfolio company of 500 Global and added to the API Evangelist
-  network.
+  support agents for messaging channels — WhatsApp, Instagram, Telegram, LinkedIn
+  and web chat, under the Mia AI product name. Each agent qualifies inbound leads,
+  answers questions from the business's own knowledge base in its brand voice,
+  books appointments on a connected calendar, recommends products from a live
+  catalog, and syncs contacts and deals to HubSpot, Bitrix, Pipedrive, amoCRM or
+  Google Sheets. It is a no-developer SaaS aimed at business teams, priced per
+  message rather than per seat. myBots publishes no developer portal, no API
+  reference and no machine-readable API specification of any kind — no OpenAPI,
+  AsyncAPI, GraphQL SDL, Postman collection, MCP server or A2A agent card exists
+  on any of its hosts. It does run real, reachable API infrastructure behind the
+  product: a live OAuth 2.0 / OpenID Connect authorization server at
+  auth.mybots.pro that serves complete anonymous discovery metadata, a
+  bearer-gated tenant API at client.mybots.pro, and one anonymous public
+  operation at notification.mybots.pro that configures the embeddable web-chat
+  widget. Surfaced as a portfolio company of 500 Global and added to the API
+  Evangelist network.
 accessModel:
-  pricing: unknown
-  onboarding: unknown
+  pricing: paid
+  onboarding: self-service
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  label: Self-service SaaS, no public API
+  confidence: high
+  source:
+  - https://mybots.pro/#pricing
+  generated: '2026-08-14'
+  method: searched
 image: https://mybots.pro/og-image.png
 url: https://raw.githubusercontent.com/api-evangelist/mybotspro/refs/heads/main/apis.yml
 x-type: company
@@ -32,7 +41,7 @@ x-tier-reason: portfolio-lead
 x-legal-name: Global AI Group, Inc.
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-08-14'
 tags:
 - Company
 - AI Agents
@@ -43,7 +52,74 @@ tags:
 - Sales Automation
 - WhatsApp
 - Telegram
-apis: []
+- Instagram
+- Omnichannel
+- Lead Qualification
+- OpenID Connect
+apis:
+- name: myBots Identity (OAuth 2.0 / OpenID Connect)
+  description: >-
+    The myBots identity provider, running OpenIddict. This is the only surface in the
+    estate that publishes a complete, anonymous, machine-readable contract: RFC 8414
+    authorization-server metadata and an OpenID Connect discovery document, both live at
+    /.well-known/. It issues the bearer tokens the tenant API requires, advertising the
+    authorization_code, client_credentials, password and refresh_token grants plus two
+    non-standard grants (verification_token, session_token), with PKCE S256 supported.
+  humanURL: https://mybots.pro
+  baseURL: https://auth.mybots.pro
+  tags:
+  - Authentication
+  - OAuth
+  - OpenID Connect
+  properties:
+  - type: OpenIDConnect
+    url: https://auth.mybots.pro/.well-known/openid-configuration
+  - type: Authentication
+    url: authentication/mybotspro-authentication.yml
+  - type: OAuthScopes
+    url: scopes/mybotspro-scopes.yml
+  - type: WellKnown
+    url: well-known/mybotspro-well-known.yml
+- name: myBots Web Chat Public API
+  description: >-
+    The anonymous configuration API behind the embeddable Mia AI web-chat widget. A single
+    published operation, GET /api/IntegrationApp/public/webchat/{channel}/config, returns
+    the launcher accent color, launcher icon and a short-lived handshake token for a
+    channel public key. It takes no credentials — the caller is authorized by a per-channel
+    domain allow-list matched against the embedding page origin. Documented only inside the
+    provider's own widget loader script; there is no reference page for it.
+  humanURL: https://mybots.pro
+  baseURL: https://notification.mybots.pro
+  tags:
+  - Web Chat
+  - Embeddable
+  - Widget
+  properties:
+  - type: Components
+    url: components/mybotspro-components.yml
+  - type: Conventions
+    url: conventions/mybotspro-conventions.yml
+  - type: ErrorCatalog
+    url: errors/mybotspro-problem-types.yml
+- name: myBots Tenant API
+  description: >-
+    The bearer-gated REST API the Mia AI application calls to operate a tenant's agents,
+    subscription and channels. Confirmed live — /api/Subscribe/program answers HTTP 401
+    with www-authenticate: Bearer, and an anonymous health endpoint reports MongoDB and
+    Redis dependencies as healthy. No specification, operation list, reference page or
+    credential-issuance path is published for it, so it is recorded as an existing but
+    undocumented surface rather than a consumable API.
+  humanURL: https://mybots.pro
+  baseURL: https://client.mybots.pro
+  tags:
+  - Agents
+  - Messaging
+  - Subscription
+  properties:
+  - type: Authentication
+    url: authentication/mybotspro-authentication.yml
+  - type: ErrorCatalog
+    url: errors/mybotspro-problem-types.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -54,6 +130,14 @@ common:
   url: https://mybots.pro
 - type: Support
   url: mailto:service@mybots.pro
+- type: Pricing
+  url: https://mybots.pro/#pricing
+- type: Login
+  url: https://mia.mybots.pro/auth/signin
+- type: TermsOfService
+  url: https://mybots.pro/terms
+- type: PrivacyPolicy
+  url: https://mybots.pro/privacy
 - type: X
   url: https://x.com/mybotsjp
 - type: LinkedIn
@@ -64,8 +148,51 @@ common:
   url: https://t.me/mybots_probot
 - type: DomainSecurity
   url: security/mybotspro-domain-security.yml
+- type: WellKnown
+  url: well-known/mybotspro-well-known.yml
+- type: OpenIDConnect
+  url: https://auth.mybots.pro/.well-known/openid-configuration
+- type: Authentication
+  url: authentication/mybotspro-authentication.yml
+- type: OAuthScopes
+  url: scopes/mybotspro-scopes.yml
+- type: Conformance
+  url: conformance/mybotspro-conformance.yml
+- type: Conventions
+  url: conventions/mybotspro-conventions.yml
+- type: ErrorCatalog
+  url: errors/mybotspro-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/mybotspro-lifecycle.yml
+- type: Plans
+  url: plans/mybotspro-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/mybotspro-rate-limits.yml
+- type: Components
+  url: components/mybotspro-components.yml
+- type: Packages
+  url: packages/mybotspro-packages.yml
+- type: LLMsTxt
+  url: llms/mybotspro-llms.txt
 x-enrichment:
-  date: '2026-07-20'
-  status: minimal
-  artifacts_added: 1
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 15
   pass: local-v1
+x-coverage:
+  state: covered
+  reason: contract-discovery-hit
+  detail: >-
+    myBots publishes no OpenAPI, but STEP 0b did not come back empty: the identity host
+    auth.mybots.pro serves live anonymous OIDC and RFC 8414 discovery documents, and the
+    provider's own widget loader documents one anonymous public API operation on
+    notification.mybots.pro. Those were captured and the rest of the profile derived from
+    observed responses.
+  evidence:
+  - url: https://auth.mybots.pro/.well-known/openid-configuration
+    status: 200
+  - url: https://notification.mybots.pro/api/IntegrationApp/public/webchat/test/config?source=widget
+    status: 404
+  - url: https://client.mybots.pro/api/Subscribe/program
+    status: 401
+  checked: '2026-08-14'
