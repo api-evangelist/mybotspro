@@ -1,0 +1,147 @@
+generated: '2026-08-14'
+method: probed
+source: >-
+  live probes of auth.mybots.pro, client.mybots.pro, notification.mybots.pro,
+  app.mybots.pro, mia.mybots.pro and mybots.pro
+note: >-
+  Every entry below is anchored to something observed on a live response or read from a
+  document myBots serves. No standard is asserted from marketing copy. This file also
+  carries the FULL negative contract-discovery record, so a later run does not repeat it.
+standards:
+- id: oauth2
+  conforms: true
+  evidence: >-
+    Live OAuth 2.0 authorization server at https://auth.mybots.pro/ with authorize/token/
+    introspect endpoints; token endpoint returns RFC 6749 §5.2 error objects
+    ({"error":"invalid_request","error_description":...}).
+- id: oidc
+  conforms: true
+  evidence: >-
+    /.well-known/openid-configuration returns 200 with issuer, authorization_endpoint,
+    token_endpoint, userinfo_endpoint, jwks_uri, response_types_supported and
+    id_token_signing_alg_values_supported (RS256).
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns 200 with the same metadata document.
+- id: rfc7636-pkce
+  conforms: partial
+  evidence: >-
+    code_challenge_methods_supported is [plain, S256]. S256 is present, but advertising
+    `plain` is discouraged by RFC 7636 §7.2 and disallowed by OAuth 2.1.
+- id: rfc9068-jwt-access-tokens
+  conforms: unknown
+  evidence: >-
+    Cannot be established anonymously — issuing a token requires client credentials that
+    are not publicly obtainable.
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: false
+  evidence: >-
+    /.well-known/oauth-protected-resource returns 404 on auth.mybots.pro,
+    client.mybots.pro and notification.mybots.pro. An MCP client cannot discover the
+    resource server from the API host.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Observed error body is a bespoke envelope {"status":"not_found","message":"..."} with
+    content-type application/json, not application/problem+json.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on every host that serves honest statuses.
+- id: rfc8615-well-known-uris
+  conforms: partial
+  evidence: >-
+    auth.mybots.pro serves standard well-known URIs correctly. However the advertised
+    jwks_uri is /.well-known/jwks, which is not the registered suffix, and
+    /.well-known/jwks.json 404s.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header observed on any response; no deprecation policy published.
+- id: openapi
+  conforms: false
+  evidence: See contract_discovery below — no OpenAPI document exists on any myBots host.
+- id: asyncapi
+  conforms: false
+  evidence: No AsyncAPI document and no published event/webhook catalog.
+- id: graphql
+  conforms: false
+  evidence: POST to /graphql on app. and mia.mybots.pro returns nginx 405 Not Allowed.
+- id: mcp
+  conforms: false
+  evidence: POST tools/list to /mcp on app. and mia.mybots.pro returns nginx 405 Not Allowed.
+- id: a2a
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json 404 on every host that serves
+    honest statuses; on mybots.pro they return the SPA HTML shell, which is not a card.
+- id: api-versioning-header
+  conforms: true
+  evidence: >-
+    notification.mybots.pro returns `api-supported-versions: 1.0` (ASP.NET API Versioning,
+    the header from the Microsoft REST API Guidelines lineage).
+- id: hsts
+  conforms: true
+  evidence: strict-transport-security max-age=31536000 observed on mybots.pro, client. and notification.
+contract_discovery:
+  checked: '2026-08-14'
+  verdict: no-published-machine-readable-api-contract
+  note: >-
+    STEP 0b was run in full against every host. The only machine-readable contracts myBots
+    publishes are the OIDC/OAuth discovery documents in well-known/. The product API itself
+    ships no spec of any kind.
+  spa_catch_all_hosts:
+  - host: mybots.pro
+    behavior: >-
+      HTTP 200 + identical HTML shell for EVERY path probed, including /openapi.json,
+      /swagger.json, /llms.txt and all /.well-known/*. All such 200s rejected as soft-404s.
+  openapi_probes:
+  - {url: 'https://mybots.pro/openapi.json', status: 200, result: html-spa-shell}
+  - {url: 'https://mybots.pro/openapi.yaml', status: 200, result: html-spa-shell}
+  - {url: 'https://mybots.pro/swagger.json', status: 200, result: html-spa-shell}
+  - {url: 'https://mybots.pro/v1/openapi.json', status: 200, result: html-spa-shell}
+  - {url: 'https://mybots.pro/api-docs', status: 200, result: html-spa-shell}
+  - {url: 'https://app.mybots.pro/openapi.json', status: 404}
+  - {url: 'https://app.mybots.pro/swagger.json', status: 404}
+  - {url: 'https://app.mybots.pro/v1/openapi.json', status: 404}
+  - {url: 'https://app.mybots.pro/api/openapi.json', status: 404}
+  - {url: 'https://app.mybots.pro/openapi.yaml', status: 200, result: html-spa-shell}
+  - {url: 'https://mia.mybots.pro/openapi.json', status: 404}
+  - {url: 'https://mia.mybots.pro/swagger.json', status: 404}
+  - {url: 'https://client.mybots.pro/openapi/v1.json', status: 404}
+  - {url: 'https://client.mybots.pro/swagger/v1/swagger.json', status: 404}
+  - {url: 'https://client.mybots.pro/swagger/index.html', status: 404}
+  - {url: 'https://client.mybots.pro/openapi.json', status: 404}
+  - {url: 'https://client.mybots.pro/api-docs', status: 404}
+  - {url: 'https://client.mybots.pro/scalar/v1', status: 404}
+  - {url: 'https://notification.mybots.pro/openapi/v1.json', status: 404}
+  - {url: 'https://notification.mybots.pro/swagger/v1/swagger.json', status: 404}
+  - {url: 'https://notification.mybots.pro/swagger', status: 404}
+  - {url: 'https://auth.mybots.pro/openapi.json', status: 404}
+  - {url: 'https://auth.mybots.pro/swagger/v1/swagger.json', status: 404}
+  graphql_probes:
+  - {url: 'https://app.mybots.pro/graphql', method: POST, status: 405, result: nginx-method-not-allowed}
+  - {url: 'https://mia.mybots.pro/graphql', method: GET, status: 200, result: html-spa-shell}
+  mcp_probes:
+  - {url: 'https://app.mybots.pro/mcp', method: POST, body: tools/list, status: 405}
+  - {url: 'https://mia.mybots.pro/mcp', method: POST, body: tools/list, status: 405}
+  agent_card_probes:
+  - {url: 'https://mybots.pro/.well-known/agent-card.json', status: 200, result: html-spa-shell-rejected}
+  - {url: 'https://mybots.pro/.well-known/agent.json', status: 200, result: html-spa-shell-rejected}
+  - {url: 'https://app.mybots.pro/.well-known/agent-card.json', status: 404}
+  - {url: 'https://app.mybots.pro/.well-known/agent.json', status: 404}
+  - {url: 'https://mia.mybots.pro/.well-known/agent-card.json', status: 404}
+  - {url: 'https://mia.mybots.pro/.well-known/agent.json', status: 404}
+  - {url: 'https://client.mybots.pro/.well-known/agent-card.json', status: 404}
+  - {url: 'https://notification.mybots.pro/.well-known/agent-card.json', status: 404}
+  llms_txt_probes:
+  - {url: 'https://mybots.pro/llms.txt', status: 200, result: html-spa-shell}
+  - {url: 'https://app.mybots.pro/llms.txt', status: 200, result: html-spa-shell}
+  - {url: 'https://mia.mybots.pro/llms.txt', status: 200, result: html-spa-shell}
+compliance:
+  published_certifications: []
+  note: >-
+    myBots publishes NO certifications and says so explicitly on its own site: the metrics
+    section is captioned "No fake certifications — just measurable operational
+    improvements." No SOC 2, ISO 27001, HIPAA, PCI or FedRAMP claim exists, so no
+    Compliance pointer is emitted. The site does market "EU / KZ data residency" on the
+    Enterprise tier and "encrypted at rest and in transit" — commitments, not audited
+    certifications.

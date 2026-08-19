@@ -1,0 +1,84 @@
+generated: '2026-08-14'
+method: probed
+source: live responses observed from myBots API hosts on 2026-08-14
+format: bespoke-json
+rfc9457: false
+note: >-
+  There is no OpenAPI to derive an error catalog from and no published error reference, so
+  this catalog contains ONLY errors actually observed on the wire. It is deliberately
+  short. Absence of an error from this list means it was not observed, not that it does not
+  exist. Two distinct envelopes are in use across the estate.
+envelopes:
+- id: product-api
+  hosts: [notification.mybots.pro, client.mybots.pro]
+  content_type: application/json; charset=utf-8
+  fields:
+    status: Machine-readable slug identifying the condition.
+    message: Human-readable sentence.
+  example: '{"status":"not_found","message":"Channel not found"}'
+- id: oauth
+  hosts: [auth.mybots.pro]
+  content_type: application/json;charset=UTF-8
+  standard: RFC 6749 §5.2
+  fields:
+    error: Registered OAuth error code.
+    error_description: Human-readable explanation.
+    error_uri: Link to vendor documentation for the error id.
+  example: >-
+    {"error":"invalid_request","error_description":"The mandatory 'client_id' parameter is
+    missing.","error_uri":"https://documentation.openiddict.com/errors/ID2029"}
+  note: >-
+    error_uri points at OpenIddict's documentation, not myBots' own — the framework vendor
+    is the documentation of record for auth errors.
+problems:
+- status: 404
+  code: not_found
+  title: Channel not found
+  envelope: product-api
+  observed_at: https://notification.mybots.pro/api/IntegrationApp/public/webchat/{channel}/config
+  observed: '2026-08-14'
+  meaning: >-
+    The web-chat channel public key does not resolve. Also the response a widget gets when
+    the embedding origin is not on the channel's domain allow-list, per the published
+    loader's comment ("domain not allowed → chat page will show the unavailable state") —
+    so 404 conflates "no such channel" with "not authorized for this origin".
+  remediation: >-
+    Verify the data-channel public key and that the embedding domain is on the channel's
+    allow-list in the myBots dashboard.
+- status: 401
+  code: null
+  title: Unauthorized
+  envelope: none
+  body: 'empty (content-length: 0)'
+  headers: 'www-authenticate: Bearer'
+  observed_at: https://client.mybots.pro/api/Subscribe/program
+  observed: '2026-08-14'
+  meaning: No bearer token, or an invalid/expired one, was presented to the tenant API.
+  remediation: Obtain an access token from https://auth.mybots.pro/connect/token.
+  note: >-
+    Returns a zero-length body — no envelope, no error code, no correlation id. A client
+    gets a bare challenge with nothing to log or surface.
+- status: 405
+  code: null
+  title: Method Not Allowed
+  envelope: none
+  body: nginx HTML error page
+  observed_at: https://notification.mybots.pro/api/IntegrationApp
+  observed: '2026-08-14'
+  meaning: >-
+    The route exists but not for the method used. Served by nginx as HTML, so a JSON client
+    receives an HTML body from an otherwise JSON API — a content-type break clients must
+    defend against.
+- status: 400
+  code: invalid_request
+  title: Invalid OAuth request
+  envelope: oauth
+  observed_at: https://auth.mybots.pro/connect/token
+  observed: '2026-08-14'
+  meaning: A mandatory OAuth parameter (e.g. client_id) was missing from the token request.
+  remediation: Send a complete token request per the discovery document's advertised grant types.
+summary:
+  problems_observed: 4
+  envelopes_in_use: 2
+  rfc9457_adoption: false
+  error_reference_published: false

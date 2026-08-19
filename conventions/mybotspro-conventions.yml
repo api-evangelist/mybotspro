@@ -1,0 +1,118 @@
+generated: '2026-08-14'
+method: probed
+source: >-
+  observed live responses from client.mybots.pro and notification.mybots.pro, plus the
+  first-party widget loader at https://mia.mybots.pro/widget.js
+note: >-
+  myBots publishes no API reference, so these conventions are read from what the API
+  actually returns on the wire and from the provider's own published JavaScript. Anything
+  not observed is recorded as `unknown` rather than assumed — an unknown here means the
+  provider documents nothing and the anonymous surface is too small to reveal it.
+authentication:
+  style: oauth2-bearer
+  detail: >-
+    Tenant API answers `www-authenticate: Bearer` on 401. Tokens come from the OpenIddict
+    server at https://auth.mybots.pro/connect/token.
+  anonymous_exception: >-
+    The web-chat public config endpoint takes no credentials at all; the caller is
+    identified by a channel public key in the path and authorized by a server-side domain
+    allow-list matched against the embedding page origin.
+  see: authentication/mybotspro-authentication.yml
+idempotency:
+  supported: unknown
+  header: null
+  evidence: >-
+    No Idempotency-Key header is documented, and none could be observed — every write path
+    on the tenant API is bearer-gated (401) and there is no OpenAPI to inspect. Recorded as
+    unknown, NOT as unsupported and NOT as supported. No Idempotency pointer is emitted for
+    this provider.
+pagination:
+  style: unknown
+  evidence: No list operation is reachable anonymously and no reference is published.
+request_tracing:
+  supported: true
+  header: x-correlation-id
+  direction: response
+  example: '5f47eccbb0aa4c91'
+  evidence:
+    url: https://notification.mybots.pro/api/IntegrationApp/public/webchat/{channel}/config
+    http_status: 404
+    observed: '2026-08-14'
+  note: >-
+    A correlation id is returned on responses, including error responses — genuinely useful
+    for support. It is undocumented, so a caller has no published guidance to quote it, and
+    it was not observed being accepted as a REQUEST header.
+versioning:
+  scheme: header
+  header: api-supported-versions
+  current: '1.0'
+  in_path: false
+  evidence:
+    url: https://notification.mybots.pro/api/IntegrationApp/public/webchat/{channel}/config
+    header: 'api-supported-versions: 1.0'
+    observed: '2026-08-14'
+  note: >-
+    ASP.NET API Versioning advertises the supported version set on the response. No version
+    appears in the URL path (routes are /api/<Controller>/... with no /v1 segment), so the
+    header is the only version signal a client gets.
+error_envelope:
+  format: bespoke-json
+  rfc9457: false
+  content_type: application/json; charset=utf-8
+  shape:
+    status: string   # machine-readable slug, e.g. "not_found"
+    message: string  # human-readable sentence, e.g. "Channel not found"
+  observed_example: '{"status":"not_found","message":"Channel not found"}'
+  oauth_exception: >-
+    The identity server returns the standard OAuth 2.0 error object instead
+    ({"error","error_description","error_uri"}), so the estate carries TWO different error
+    shapes with no published guidance on which applies where.
+  see: errors/mybotspro-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  supported: false
+  evidence: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header appeared on any observed response
+    from notification.mybots.pro, client.mybots.pro or auth.mybots.pro.
+  see: rate-limits/mybotspro-rate-limits.yml
+naming:
+  path_style: PascalCase-controller
+  examples:
+  - /api/IntegrationApp/public/webchat/{channel}/config
+  - /api/Subscribe/program
+  - /api/verification
+  - /api/antiforgery/token
+  note: >-
+    Route segments mirror .NET controller class names (IntegrationApp, Subscribe) rather
+    than a resource vocabulary, so paths are capitalized inconsistently against the
+    lowercase segments beneath them. Endpoint list observed in the published bundles; it is
+    a partial view, not the full surface.
+caching:
+  headers_observed: [cache-control]
+  detail: 'auth.mybots.pro sends cache-control: no-store on token responses (correct for OAuth).'
+transport:
+  https_only: true
+  http2: true
+  hsts: true
+  server: nginx
+csrf:
+  antiforgery_endpoint: /api/antiforgery/token
+  note: >-
+    An antiforgery token endpoint exists (referenced by the first-party bundle), indicating
+    cookie-based session flows alongside bearer auth in the tenant application.
+webhooks:
+  documented: false
+  marketing_claim: >-
+    The site's Deployment section claims "scoped API keys, signed webhooks" under Secure
+    infrastructure. No webhook catalog, event list, payload schema, signature algorithm or
+    header name is published anywhere, and no API-key scheme is documented or observable.
+  action: >-
+    Claim recorded, NOT credited. No Webhooks pointer and no AsyncAPI artifact is emitted
+    from a marketing sentence.
+cross_links:
+  authentication: authentication/mybotspro-authentication.yml
+  scopes: scopes/mybotspro-scopes.yml
+  errors: errors/mybotspro-problem-types.yml
+  lifecycle: lifecycle/mybotspro-lifecycle.yml
+  rate_limits: rate-limits/mybotspro-rate-limits.yml
+  well_known: well-known/mybotspro-well-known.yml

@@ -1,0 +1,84 @@
+generated: '2026-08-14'
+method: searched
+source: https://mia.mybots.pro/widget.js
+note: >-
+  myBots ships exactly one embeddable client-side component: the Mia AI web-chat widget
+  loader. It is genuinely first-party and genuinely self-documenting — the served file
+  opens with a usage comment giving the script tag and every supported attribute — but it
+  is documented ONLY inside the JavaScript itself. There is no page on mybots.pro that
+  tells an integrator this component exists or how to embed it, which makes this the
+  provider's only real integration surface and also its most hidden one.
+components:
+- family: web-chat
+  name: Mia AI web-chat widget
+  kind: script-loader
+  loader_url: https://mia.mybots.pro/widget.js
+  also_served_at: https://app.mybots.pro/widget.js
+  http_status: 200
+  content_type: application/javascript
+  size_bytes: 11443
+  official: true
+  install: '<script src="https://mia.mybots.pro/widget.js" data-channel="PUBLIC_KEY" async></script>'
+  install_source: verbatim from the usage comment at the top of the served file
+  attributes:
+  - name: data-channel
+    required: true
+    description: >-
+      The channel public key. Identifies which myBots web-chat channel the widget opens.
+      The loader logs "[mybots-widget] missing data-channel attribute" and aborts without it.
+  - name: data-color
+    required: false
+    default: '#2563eb'
+    description: >-
+      Accent color for the launcher button, as a 3- or 6-digit hex value. Overrides the
+      accentColor returned by the channel config.
+  - name: data-position
+    required: false
+    default: right
+    enum: [left, right]
+    description: Which side of the viewport the launcher button is fixed to.
+  configuration_endpoint:
+    method: GET
+    url: https://notification.mybots.pro/api/IntegrationApp/public/webchat/{channel}/config?source=widget
+    auth: none
+    credentials: omit
+    response_fields: [accentColor, launcherIcon, handshakeToken]
+    note: >-
+      The only anonymous, callable API operation myBots exposes. Returns 404 with
+      {"status":"not_found","message":"Channel not found"} for an unknown channel, which is
+      also the response when the embedding origin fails the channel's domain allow-list.
+  behavior:
+  - Renders a fixed 60px circular launcher button with an unread-count badge.
+  - >-
+      Fetches the channel config, then loads the chat page in an iframe at
+      /chat/{channel}?embed=1&source=widget on the loader's own origin, appending the
+      handshake token (hs) returned by the config call.
+  - Falls back to loading the iframe with no handshake token when the config call fails.
+  launcher_icons: [bubble, message, robot, headset, sparkle, help]
+  security:
+    origin_enforcement: >-
+      The embedding page origin is forwarded so the backend can enforce a per-channel
+      domain allow-list — authorization is by origin, not by token.
+    handshake_token: >-
+      A short-lived `hs` token from the validated config call is passed to the chat iframe.
+      Its lifetime, format and rotation are undocumented.
+distribution:
+  registry: none
+  packaged: false
+  note: >-
+    Distributed only as a self-hosted script from the provider's own origin. It is not on
+    npm, unpkg or jsDelivr, so there is no registry metadata endpoint to query and no
+    integrity attribute is published for a subresource-integrity pin.
+  pinning: unpinned
+  version: null
+  version_note: >-
+    The loader URL carries no version segment and no query version, so it floats to
+    whatever myBots deploys. An embedder cannot tell which build they are running and
+    cannot pin one — the same uncertainty is recorded in packages/.
+absent:
+  element_library: false
+  embedded_dashboard: false
+  hosted_checkout: false
+  note: >-
+    No web-component/custom-element library, no embeddable dashboard, and no other
+    client-side surface was found on any host.

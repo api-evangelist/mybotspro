@@ -1,0 +1,77 @@
+generated: '2026-08-14'
+method: probed
+source: https://auth.mybots.pro/.well-known/openid-configuration
+note: >-
+  Scopes are taken verbatim from `scopes_supported` in the provider's live OIDC discovery
+  document. myBots publishes no scopes/permissions reference page, so there are no
+  descriptions to enrich with — the descriptions below are the STANDARD OIDC/OAuth
+  definitions of these registered scopes (RFC 6749 / OpenID Connect Core 1.0 §5.4), not
+  claims about myBots-specific behavior. Every scope advertised is a standard one; myBots
+  advertises NO product-specific scopes (nothing for agents, channels, conversations,
+  contacts or billing), so an OAuth client cannot request least-privilege access to any
+  myBots resource — only identity.
+docs: null
+schemes:
+- name: OAuth2
+  source: well-known/mybotspro-openid-configuration.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.mybots.pro/connect/authorize
+    tokenUrl: https://auth.mybots.pro/connect/token
+  - flow: clientCredentials
+    tokenUrl: https://auth.mybots.pro/connect/token
+  - flow: password
+    tokenUrl: https://auth.mybots.pro/connect/token
+scopes:
+- scope: openid
+  description: Standard OIDC scope requesting an ID token for the authenticated subject.
+  standard: OpenID Connect Core 1.0
+  product_specific: false
+  flows: [authorizationCode]
+  sources: [well-known/mybotspro-openid-configuration.json]
+- scope: profile
+  description: >-
+    Standard OIDC scope for the end-user's default profile claims (name, family_name,
+    picture, updated_at, and similar).
+  standard: OpenID Connect Core 1.0 §5.4
+  product_specific: false
+  flows: [authorizationCode]
+  sources: [well-known/mybotspro-openid-configuration.json]
+- scope: email
+  description: Standard OIDC scope for the email and email_verified claims.
+  standard: OpenID Connect Core 1.0 §5.4
+  product_specific: false
+  flows: [authorizationCode]
+  sources: [well-known/mybotspro-openid-configuration.json]
+- scope: phone
+  description: Standard OIDC scope for the phone_number and phone_number_verified claims.
+  standard: OpenID Connect Core 1.0 §5.4
+  product_specific: false
+  flows: [authorizationCode]
+  sources: [well-known/mybotspro-openid-configuration.json]
+- scope: offline_access
+  description: >-
+    Standard OIDC scope requesting a refresh token so the client can obtain access tokens
+    without the end-user present.
+  standard: OpenID Connect Core 1.0 §11
+  product_specific: false
+  flows: [authorizationCode]
+  sources: [well-known/mybotspro-openid-configuration.json]
+- scope: roles
+  description: >-
+    Role claims for the authenticated subject. Conventional in OpenIddict/ASP.NET Identity
+    deployments; myBots publishes no enumeration of which roles exist.
+  standard: null
+  product_specific: false
+  flows: [authorizationCode, clientCredentials]
+  sources: [well-known/mybotspro-openid-configuration.json]
+claims_supported: [aud, exp, iat, iss, sub]
+claims_note: >-
+  `claims_supported` lists only the five registered JWT claims. Despite advertising the
+  profile/email/phone scopes, the discovery document does not advertise the corresponding
+  claims (name, email, phone_number), so a client cannot tell from discovery what the
+  userinfo endpoint will actually return.
+summary:
+  scope_count: 6
+  product_specific_scope_count: 0
+  standard_oidc_scope_count: 6

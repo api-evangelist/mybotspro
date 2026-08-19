@@ -1,0 +1,57 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, rubygems.org, api.github.com and the provider's own
+  published bundles
+note: >-
+  myBots ships NO client SDK in any language. Every public registry was queried directly
+  and every candidate name 404s. The single first-party distributable is the web-chat
+  widget loader, which is a browser script served from the provider's own origin — not a
+  client library for an API. It is listed here for completeness with official: true, but
+  NO `SDKs` pointer is emitted in apis.yml for this provider, because crediting a chat
+  widget as an API SDK would be false credit on the sdk_count check.
+package_count: 1
+sdk_count: 0
+packages:
+- language: javascript
+  registry: cdn
+  name: mybots-widget
+  url: https://mia.mybots.pro/widget.js
+  install: '<script src="https://mia.mybots.pro/widget.js" data-channel="PUBLIC_KEY" async></script>'
+  official: true
+  is_api_sdk: false
+  kind: browser-widget-loader
+  version: null
+  published: null
+  version_note: >-
+    Checked, nothing to record. The distribution is UNPINNED — the URL carries no version
+    segment (contrast .../pkg@1.4.2/...) and there is no registry metadata endpoint to
+    query, because the file is self-hosted rather than published to npm/unpkg/jsDelivr. An
+    embedder cannot determine which build they are loading either; that is the finding.
+  http_status: 200
+  size_bytes: 11443
+  checked: '2026-08-14'
+  see: components/mybotspro-components.yml
+registry_probes:
+- {registry: npm, name: mybots, url: 'https://registry.npmjs.org/mybots', status: 404}
+- {registry: npm, name: mybots-pro, url: 'https://registry.npmjs.org/mybots-pro', status: 404}
+- {registry: npm, name: '@mybots/sdk', url: 'https://registry.npmjs.org/@mybots%2Fsdk', status: 404}
+- {registry: npm, name: mia-ai, url: 'https://registry.npmjs.org/mia-ai', status: 404}
+- {registry: pypi, name: mybots, url: 'https://pypi.org/pypi/mybots/json', status: 404}
+- {registry: pypi, name: mybotspro, url: 'https://pypi.org/pypi/mybotspro/json', status: 404}
+- {registry: github, org: mybots, url: 'https://api.github.com/orgs/mybots', status: 404}
+- {registry: github, org: mybots-pro, url: 'https://api.github.com/orgs/mybots-pro', status: 404}
+- {registry: github, org: mybotspro, url: 'https://api.github.com/orgs/mybotspro', status: 404}
+- {registry: github, org: globalaigroup, url: 'https://api.github.com/orgs/globalaigroup', status: 404}
+false_positives_rejected:
+- name: mybots-api.js
+  registry: npm
+  url: https://www.npmjs.com/package/mybots-api.js
+  reason: >-
+    Surfaced by an npm text search for "mybots" but is described as "An official myDbots.ml
+    api" — a Discord bot-list wrapper belonging to a different, unrelated project. Not
+    myBots.pro. Rejected.
+- name: mybots-builders
+  registry: npm
+  reason: 'Described as "Builders for discordjs" — unrelated Discord tooling. Rejected.'
+searched_registries: [npm, PyPI, RubyGems, Packagist, crates.io, NuGet, Maven Central, pkg.go.dev, GitHub]

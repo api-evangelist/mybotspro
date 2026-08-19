@@ -1,0 +1,87 @@
+generated: '2026-08-14'
+method: probed
+source: live probes of myBots hosts 2026-08-14 plus https://mybots.pro/sitemap.xml
+note: >-
+  myBots publishes no versioning policy, no deprecation policy, no changelog, no status
+  page and no SLA document. The only lifecycle signal the platform emits is an API version
+  header on responses. Everything below is either observed or an explicit recorded absence.
+versioning:
+  scheme: header
+  header: api-supported-versions
+  current: '1.0'
+  in_path: false
+  docs: null
+  evidence:
+    url: https://notification.mybots.pro/api/IntegrationApp/public/webchat/{channel}/config
+    http_status: 404
+    header: 'api-supported-versions: 1.0'
+    observed: '2026-08-14'
+  note: >-
+    ASP.NET API Versioning is enabled and reports a single supported version, 1.0. Since no
+    version appears in the route, a breaking change would have to be signalled through this
+    header — with no published policy telling a client to read it.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  evidence: >-
+    No Sunset (RFC 8594) or Deprecation header observed on any response from
+    auth.mybots.pro, client.mybots.pro or notification.mybots.pro.
+  note: No Deprecation pointer is emitted — there is no deprecation policy to point at.
+status_page:
+  url: null
+  published: false
+  evidence:
+  - {url: 'https://status.mybots.pro/', result: 'TLS failure — no certificate covers this name'}
+  note: >-
+    No status page exists. status.mybots.pro resolves only because *.mybots.pro is a
+    wildcard record; the TLS certificate covers just app.mybots.pro and mia.mybots.pro, so
+    the name does not serve. No StatusPage pointer is emitted.
+  health_endpoints:
+  - url: https://client.mybots.pro/health
+    status: 200
+    body: '{"status":"Healthy","entries":{"mongodb":...,"RedisConnectionCheck":...,"client-resource":...}}'
+  - url: https://notification.mybots.pro/health
+    status: 200
+  health_note: >-
+    Both API hosts expose an anonymous ASP.NET Core health-check endpoint that reports
+    per-dependency status. These are the closest thing to public availability signal myBots
+    offers — undocumented, and arguably over-shared: they disclose the backing stack
+    (MongoDB, Redis) and named internal health checks to any anonymous caller.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No SLA document is published. The pricing page states "response SLAs available on
+    Business and Enterprise plans" — a sales commitment with no published terms, and note
+    that no "Business" tier appears in the plan table at all.
+changelog:
+  url: null
+  published: false
+  note: No dated changelog or release notes page exists on any host. No ChangeLog pointer is emitted.
+roadmap:
+  url: null
+  published: false
+deprecated_operations: []
+deprecated_operations_note: >-
+  Cannot be derived — myBots publishes no OpenAPI. See conformance/ for the full
+  contract-discovery record.
+site_freshness:
+  source: https://mybots.pro/sitemap.xml
+  pages:
+  - {url: 'https://mybots.pro/', lastmod: '2026-05-17'}
+  - {url: 'https://mybots.pro/terms', lastmod: '2026-03-30'}
+  - {url: 'https://mybots.pro/privacy', lastmod: '2026-03-30'}
+  - {url: 'https://mybots.pro/public-offer', lastmod: '2025-08-24'}
+  - {url: 'https://mybots.pro/payments', lastmod: '2026-01-01'}
+  - {url: 'https://mybots.pro/refund', lastmod: '2026-01-01'}
+  note: >-
+    The sitemap lists six pages total and no developer or documentation page among them —
+    a compact confirmation that no developer surface is published.
+tls:
+  cert_expiry_mybots_pro: 'Nov  7 07:20:04 2026 GMT'
+  cert_note: >-
+    Short-lived certificates renewed on a rolling basis across mybots.pro, auth. and
+    notification. — all three were reissued between the 2026-07-20 and 2026-08-14 probes.
+  see: security/mybotspro-domain-security.yml

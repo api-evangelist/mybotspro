@@ -1,0 +1,49 @@
+generated: '2026-08-14'
+method: probed
+source: >-
+  live response headers observed on myBots hosts 2026-08-14, plus plan quotas published at
+  https://mybots.pro/#pricing
+note: >-
+  myBots publishes NO API rate limits. What it publishes are PRODUCT quotas — monthly
+  message allowances per subscription tier — which are a billing meter on the hosted agent,
+  not a per-key request limit on an HTTP API. The two are recorded separately below so the
+  quota is never mistaken for a documented API limit.
+limit_count: 0
+limits: []
+response_headers:
+  observed: []
+  ratelimit_draft: false
+  x_ratelimit: false
+  retry_after: false
+  evidence:
+  - url: https://notification.mybots.pro/api/IntegrationApp/public/webchat/{channel}/config
+    http_status: 404
+    headers_present: [server, date, content-type, strict-transport-security, api-supported-versions, x-correlation-id]
+    rate_limit_headers: none
+  - url: https://client.mybots.pro/api/Subscribe/program
+    http_status: 401
+    headers_present: [server, date, content-length, cache-control, expires, pragma, www-authenticate, strict-transport-security]
+    rate_limit_headers: none
+  - url: https://client.mybots.pro/health
+    http_status: 200
+    rate_limit_headers: none
+exhaustion_status_code: unknown
+exhaustion_note: >-
+  No 429 was observed and none is documented. Probing was deliberately kept to single
+  requests per path — this pipeline does not generate load to discover a limit.
+product_quotas:
+  kind: subscription-message-allowance
+  enforced_on: agent conversations, not API requests
+  source: https://mybots.pro/#pricing
+  see: plans/mybotspro-plans-pricing.yml
+  tiers:
+  - {plan: Solo, messages_per_month: 1000, ai_agents: 1, integrations: 1}
+  - {plan: Lite, messages_per_month: 2000, ai_agents: 1, integrations: 3}
+  - {plan: Pro, messages_per_month: 5000, ai_agents: 5, integrations: 3}
+  - {plan: Agency, messages_per_month: 15000, ai_agents: 5, integrations: 10}
+  - {plan: Enterprise, messages_per_month: unlimited, ai_agents: unlimited}
+upstream_limits:
+  note: >-
+    Because the product delivers over WhatsApp, Instagram and Telegram, real throughput is
+    also bounded by those platforms' own messaging limits. myBots does not document how its
+    quotas interact with them.

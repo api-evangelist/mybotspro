@@ -1,0 +1,137 @@
+generated: '2026-08-14'
+method: probed
+source: live GET of /.well-known/* on every myBots host
+note: >-
+  myBots serves a REAL OAuth 2.0 / OpenID Connect discovery surface on its identity host
+  auth.mybots.pro — openid-configuration, oauth-authorization-server (RFC 8414) and the JWKS
+  are all live, anonymous, and captured verbatim in this directory. Every OTHER host is a
+  negative result and must be read as such: the marketing site mybots.pro is a client-side
+  SPA whose catch-all answers HTTP 200 with the same HTML shell for EVERY path, including
+  every /.well-known/* path probed, so those 200s are soft-404s and are recorded here as
+  misses, not as documents. The application hosts (app./mia.mybots.pro) and the API hosts
+  (client./notification.mybots.pro) return honest 404s.
+hosts:
+- host: https://auth.mybots.pro
+  role: identity provider (OpenIddict)
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json;charset=UTF-8
+    file: mybotspro-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json;charset=UTF-8
+    file: mybotspro-oauth-authorization-server.json
+    note: RFC 8414 authorization server metadata; byte-identical payload to the OIDC document.
+  - path: /.well-known/jwks
+    status: 200
+    content_type: application/json
+    file: mybotspro-jwks.json
+    note: >-
+      Non-standard path. The discovery document advertises jwks_uri
+      https://auth.mybots.pro/.well-known/jwks, NOT the conventional
+      /.well-known/jwks.json — which 404s. Clients must read jwks_uri rather than guess.
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/jwks.json
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://mybots.pro
+  role: marketing site (client-side SPA)
+  spa_catch_all: true
+  note: >-
+    Every path returns HTTP 200 with the SPA HTML shell. These are NOT documents. Treated
+    as misses. Recorded so a later run does not re-credit the soft-200.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    result: miss
+    body: html-spa-shell
+  - path: /.well-known/openid-configuration
+    status: 200
+    result: miss
+    body: html-spa-shell
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    result: miss
+    body: html-spa-shell
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    result: miss
+    body: html-spa-shell
+  - path: /.well-known/api-catalog
+    status: 200
+    result: miss
+    body: html-spa-shell
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    result: miss
+    body: html-spa-shell
+  - path: /.well-known/agent-card.json
+    status: 200
+    result: miss
+    body: html-spa-shell
+  - path: /.well-known/agent.json
+    status: 200
+    result: miss
+    body: html-spa-shell
+- host: https://app.mybots.pro
+  role: tenant application (SPA)
+  documents:
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/security.txt
+    status: 200
+    result: miss
+    body: html-spa-shell
+  - path: /.well-known/api-catalog
+    status: 200
+    result: miss
+    body: html-spa-shell
+- host: https://mia.mybots.pro
+  role: tenant application + web-chat widget origin (SPA)
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/security.txt
+    status: 200
+    result: miss
+    body: html-spa-shell
+- host: https://client.mybots.pro
+  role: tenant REST API (bearer-gated)
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://notification.mybots.pro
+  role: web-chat public API
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+summary:
+  hosts_probed: 6
+  documents_found: 3
+  security_txt: false
+  api_catalog: false
+  agent_card: false
+  ai_plugin: false

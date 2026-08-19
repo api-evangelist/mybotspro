@@ -1,0 +1,107 @@
+generated: '2026-08-14'
+method: searched
+source: https://mybots.pro/#pricing
+source_note: >-
+  mybots.pro is a client-side SPA, so the pricing section is not in the served HTML. Every
+  figure below is read verbatim from the provider's own published application bundle
+  (https://mybots.pro/assets/index-wDaAbOys.js), which is the same data the rendered
+  pricing section displays. Nothing is estimated.
+currency: USD
+billing_periods: [monthly, yearly]
+yearly_discount: '20%'
+metering: >-
+  Plans are metered on MESSAGES, not seats — the provider's own framing is "Simple plans.
+  Pay for messages, not seats." Every plan includes the full omnichannel agent and a
+  tenant knowledge base.
+plan_count: 5
+plans:
+- name: Solo
+  audience: Solo operators just getting started.
+  price_monthly: 25
+  price_yearly_per_month: 20
+  currency: USD
+  unit: per month
+  quota:
+    messages_per_month: 1000
+    ai_agents: 1
+    integrations: 1
+  channels: [whatsapp, instagram, linkedin, telegram]
+  cta: Start with Solo
+- name: Lite
+  audience: Small teams adding CRM and more volume.
+  price_monthly: 49
+  price_yearly_per_month: 39
+  currency: USD
+  unit: per month
+  quota:
+    messages_per_month: 2000
+    ai_agents: 1
+    integrations: 3
+  channels: [whatsapp, instagram, linkedin, telegram, crm]
+  cta: Start with Lite
+- name: Pro
+  audience: Operators with serious inbound volume.
+  price_monthly: 99
+  price_yearly_per_month: 79
+  currency: USD
+  unit: per month
+  quota:
+    messages_per_month: 5000
+    ai_agents: 5
+    integrations: 3
+  channels: [whatsapp, instagram, linkedin, telegram, crm]
+  highlighted: true
+  badge: Most chosen
+  cta: Start with Pro
+- name: Agency
+  audience: Partners/agencies running multiple client agents.
+  price_monthly: 290
+  price_alt: "≈ ₸129,990"
+  currency: USD
+  unit: per month
+  quota:
+    messages_per_month: 15000
+    ai_agents: 5
+    integrations: 10
+  cta: Start Agency plan
+  note: >-
+    Sold through the Partners section rather than the main pricing table. The partner
+    program also advertises 30% recurring revenue on every client.
+- name: Enterprise
+  audience: Networks, franchises, regulated industries.
+  price_monthly: null
+  price_model: custom
+  currency: null
+  unit: null
+  quota:
+    messages_per_month: unlimited
+    ai_agents: unlimited
+  features:
+  - Unlimited messages and agents
+  - Custom workflows + role-based access
+  - Dedicated launch engineer, response SLA
+  - Single sign-on, audit logs
+  - EU / KZ data residency
+  channels: [whatsapp, instagram, linkedin, telegram, webchat, crm]
+  cta: Book a demo
+  cta_url: https://calendly.com/nurdias-mybots/30min
+api_access:
+  included_in_any_plan: false
+  note: >-
+    No plan mentions API access, API keys, developer seats or request quotas. Pricing is
+    entirely per-message for the hosted agent product; there is no developer tier to buy.
+    The API surfaces that exist (client.mybots.pro, notification.mybots.pro) are internal
+    to the product, not a sold capability.
+overage:
+  documented: false
+  note: What happens when the monthly message quota is exhausted is not published.
+payment:
+  currencies_referenced: [USD, KZT]
+  methods_referenced: [Kaspi]
+  note: >-
+    Prices are quoted in USD with a Kazakhstani tenge equivalent on the Agency plan; the
+    product demo shows Kaspi payment links, consistent with a Kazakhstan-centric market.
+  policy_pages:
+  - https://mybots.pro/payments
+  - https://mybots.pro/refund
+  - https://mybots.pro/public-offer
