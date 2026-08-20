@@ -48,6 +48,20 @@ tags:
 - Conversational AI
 - Messaging
 - Chatbots
+- Customer-Support
+- Sales Automation
+- WhatsApp
+- Telegram
+- Instagram
+- Omnichannel
+- Lead Qualification
+- OpenID Connect
+tags_raw:
+- Company
+- AI Agents
+- Conversational AI
+- Messaging
+- Chatbots
 - Customer Support
 - Sales Automation
 - WhatsApp
@@ -68,6 +82,9 @@ apis:
   humanURL: https://mybots.pro
   baseURL: https://auth.mybots.pro
   tags:
+  - Authentication
+  - OpenID Connect
+  tags_raw:
   - Authentication
   - OAuth
   - OpenID Connect
