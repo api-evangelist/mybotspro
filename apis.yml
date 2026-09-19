@@ -121,6 +121,10 @@ apis:
   tags:
   - Web Chat
   - Embeddable
+  - Widgets
+  tags_raw:
+  - Web Chat
+  - Embeddable
   - Widget
   properties:
   - type: Components
