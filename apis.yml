@@ -59,14 +59,13 @@ tags:
 - Conversational AI
 - Messaging
 - Chatbots
-- Customer-Support
+- Customer Support
 - Sales Automation
 - WhatsApp
 - Telegram
 - Instagram
 - Omnichannel
 - Lead Qualification
-- OpenID Connect
 tags_raw:
 - Company
 - AI Agents
@@ -80,7 +79,7 @@ tags_raw:
 - Instagram
 - Omnichannel
 - Lead Qualification
-- OpenID Connect
+- Customer-Support
 apis:
 - name: myBots Identity (OAuth 2.0 / OpenID Connect)
   description: >-
@@ -228,3 +227,5 @@ x-coverage:
   - url: https://client.mybots.pro/api/Subscribe/program
     status: 401
   checked: '2026-08-14'
+x-tags-removed:
+- OpenID Connect
