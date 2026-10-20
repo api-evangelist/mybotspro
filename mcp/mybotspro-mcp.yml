@@ -27,14 +27,14 @@ tools_note: No tool list captured. This manifest records a PROBED, reachable end
   authorship. Do NOT derive a tool list from the OpenAPI and store it here -- that is a candidate manifest,
   and it belongs under an X-MCPServerCandidate pointer.
 tool_quality:
-  tool_count: 101
-  tokens_total: 61318
-  tokens_per_tool_median: 370
+  tool_count: 110
+  tokens_total: 65183
+  tokens_per_tool_median: 354
   heavy_tools:
   - name: generate_video
-    tokens: 6529
+    tokens: 6910
   - name: generate_image
-    tokens: 5122
+    tokens: 5326
   - name: miracle
     tokens: 2827
   - name: direct_video
@@ -42,11 +42,11 @@ tool_quality:
   - name: generate_3d
     tokens: 1800
   heavy_tool_count: 10
-  params_total: 473
+  params_total: 540
   params_undescribed: 0
   params_described_pct: 100.0
   tools_with_undescribed_params: 0
-  tools_annotated: 101
+  tools_annotated: 110
   annotated_pct: 100.0
   state_changing_unhinted:
   - modify_video

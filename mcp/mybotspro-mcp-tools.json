@@ -1132,59 +1132,6 @@
         }
       },
       {
-        "name": "isolate_voice",
-        "title": "Clean up the speech in a clip or track",
-        "description": "Removes background noise, music and room echo from speech (voice isolator). SPENDS CREDITS (per minute of the source; see estimate_cost kind 'isolate'). The source is a Mira clip or audio generation (sourceGenerationId) or an uploaded clip/track (libraryItemId) - exactly one - up to 30 minutes. A video comes back as a video with the cleaned sound; an audio source as an mp3. Useful before translate_video or transcribe_video on noisy recordings. Returns a new generation_id; call wait_for_generation.",
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "sourceGenerationId": {
-              "description": "generation_id of the source clip or audio.",
-              "type": [
-                "string",
-                "null"
-              ],
-              "default": null
-            },
-            "libraryItemId": {
-              "description": "library_item_id of an uploaded clip or track. Pass one of the two ids.",
-              "type": [
-                "string",
-                "null"
-              ],
-              "default": null
-            }
-          }
-        },
-        "annotations": {
-          "title": "Clean up the speech in a clip or track",
-          "openWorldHint": false,
-          "readOnlyHint": false
-        }
-      },
-      {
-        "name": "wait_for_generation",
-        "title": "Wait for a generation to finish",
-        "description": "Blocks until the generation finishes, then returns the media URLs. It never blocks for more than about a minute: if the work is still running when that budget is spent it returns status 'running' with poll_after_ms, and you should simply call it again with the same generation_id. Video routinely needs several such calls. Show the returned URLs to the user when the status is 'succeeded'. Audio comes back as an mp3 URL in urls[0]; transcripts and analyses have an empty urls and their JSON/SRT in files[] (role 'transcript', 'srt', 'analysis') - fetch those URLs to read the content.",
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "generationId": {
-              "description": "generation_id returned by any generation tool (generate_image, generate_video, generate_audio, transcribe_video, analyze_transcript...).",
-              "type": "string"
-            }
-          },
-          "required": [
-            "generationId"
-          ]
-        },
-        "annotations": {
-          "title": "Wait for a generation to finish",
-          "openWorldHint": false,
-          "readOnlyHint": true
-        }
-      },
-      {
         "name": "update_mira_guide",
         "title": "Edit one of the user's own Mira guides",
         "description": "Edits the WORKING COPY of one of the user's own community guides: a draft, or the pending changes of a published guide. Call get_mira_guide(id) first and change only what the user asked for. Every field is optional; an omitted field keeps its current value. blocks REPLACES the whole block list: send every block in reading order, the unchanged ones exactly as get_mira_guide returned them (with their id), new ones without an id, in the same shapes as draft_mira_guide. tools replaces the author's list of programs ([] clears it). Changes to a published guide stay unpublished - readers keep seeing the old version until it is published again, by the user in the editor or by publish_mira_guide on their explicit request. Guides removed by moderation cannot be edited. Free.",
@@ -1417,6 +1364,59 @@
         }
       },
       {
+        "name": "isolate_voice",
+        "title": "Clean up the speech in a clip or track",
+        "description": "Removes background noise, music and room echo from speech (voice isolator). SPENDS CREDITS (per minute of the source; see estimate_cost kind 'isolate'). The source is a Mira clip or audio generation (sourceGenerationId) or an uploaded clip/track (libraryItemId) - exactly one - up to 30 minutes. A video comes back as a video with the cleaned sound; an audio source as an mp3. Useful before translate_video or transcribe_video on noisy recordings. Returns a new generation_id; call wait_for_generation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sourceGenerationId": {
+              "description": "generation_id of the source clip or audio.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "libraryItemId": {
+              "description": "library_item_id of an uploaded clip or track. Pass one of the two ids.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            }
+          }
+        },
+        "annotations": {
+          "title": "Clean up the speech in a clip or track",
+          "openWorldHint": false,
+          "readOnlyHint": false
+        }
+      },
+      {
+        "name": "wait_for_generation",
+        "title": "Wait for a generation to finish",
+        "description": "Blocks until the generation finishes, then returns the media URLs. It never blocks for more than about a minute: if the work is still running when that budget is spent it returns status 'running' with poll_after_ms, and you should simply call it again with the same generation_id. Video routinely needs several such calls. Show the returned URLs to the user when the status is 'succeeded'. Audio comes back as an mp3 URL in urls[0]; transcripts and analyses have an empty urls and their JSON/SRT in files[] (role 'transcript', 'srt', 'analysis') - fetch those URLs to read the content.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "generationId": {
+              "description": "generation_id returned by any generation tool (generate_image, generate_video, generate_audio, transcribe_video, analyze_transcript...).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "generationId"
+          ]
+        },
+        "annotations": {
+          "title": "Wait for a generation to finish",
+          "openWorldHint": false,
+          "readOnlyHint": true
+        }
+      },
+      {
         "name": "blogger_speak",
         "title": "Make an AI Blogger say a script on camera",
         "description": "Makes the user's AI BLOGGER say a script on camera: the text is voiced in the blogger's pinned voice (or voiceId) and the blogger's canon portrait is animated to it with Kling AI Avatar - lips, face, head and shoulders follow the speech, and the clip is as long as the speech. Script: at least one full sentence (about 2 s), up to 4000 characters; audio tags like [whispers] or [laughs] work. SPENDS CREDITS: speech per characters plus Kling AI Avatar per second of speech - mode 'pro' (default) about 6 credits per second, 'std' about 3. Quote the exact price first (estimate_cost kind 'blogger_speech' with chars = script length and model 'pro' or 'std') and get a yes. A blogger with no pinned voice speaks in the platform's default voice - pin one with set_blogger_voice first when the user cares. Returns a generation_id; call wait_for_generation.",
@@ -1499,7 +1499,7 @@
       {
         "name": "film_list_projects",
         "title": "List AI Film Studio projects",
-        "description": "Lists the user's AI FILM STUDIO projects - team film projects inside workspaces (their own, the teams they belong to, and projects shared with them as a guest): filmProjectId, name, workspace, the user's role and asset count. Call it when the user talks about a film project, their team, 'the project', a storyboard or a cast they share with others. Spends no credits.",
+        "description": "Lists the user's AI FILM STUDIO projects and AI MARKETING STUDIO campaigns - team projects inside workspaces (their own, the teams they belong to, and ones shared with them as a guest): filmProjectId, name, projectType (film | marketing), workspace, the user's role and asset count. Call it when the user talks about a film project, a campaign, their team, a storyboard or a cast they share with others. A 'marketing' project is a campaign: use the mkt_* tools with it. Spends no credits.",
         "inputSchema": {
           "type": "object",
           "properties": {}
@@ -2234,6 +2234,62 @@
                 ]
               },
               "default": null
+            },
+            "brandMode": {
+              "description": "AI MARKETING STUDIO campaigns only (with filmProjectId): off | accents (default) | lock (video: the grade follows the brand palette). The campaign's brand kit is applied by the server; never write the logo or hex codes into the prompt.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "placementId": {
+              "description": "AI MARKETING STUDIO campaigns only: placementId from mkt_list_styles (reels, stories, ig_feed_portrait, ig_feed_square, youtube…) - sets the aspect ratio for that placement.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "styleId": {
+              "description": "AI MARKETING STUDIO campaigns only: styleId from mkt_list_styles - brings the style's recipe, skill and defaults.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "hookId": {
+              "description": "AI MARKETING STUDIO campaigns only, video: hookId from mkt_list_styles - the opening beat.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "hookText": {
+              "description": "AI MARKETING STUDIO campaigns only, video: the opening beat in your words (max 300 chars).",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "settingId": {
+              "description": "AI MARKETING STUDIO campaigns only, video: settingId from mkt_list_styles - where it happens.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "settingText": {
+              "description": "AI MARKETING STUDIO campaigns only, video: the place in your words (max 300 chars).",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
             }
           },
           "required": [
@@ -2841,6 +2897,30 @@
                 ]
               },
               "default": null
+            },
+            "brandMode": {
+              "description": "AI MARKETING STUDIO campaigns only (with filmProjectId): off | accents (default) | lock (video: the grade follows the brand palette). The campaign's brand kit is applied by the server; never write the logo or hex codes into the prompt.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "placementId": {
+              "description": "AI MARKETING STUDIO campaigns only: placementId from mkt_list_styles (reels, stories, ig_feed_portrait, ig_feed_square, youtube…) - sets the aspect ratio for that placement.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "styleId": {
+              "description": "AI MARKETING STUDIO campaigns only: styleId from mkt_list_styles - brings the style's recipe, skill and defaults.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
             }
           },
           "required": [
@@ -3057,6 +3137,36 @@
           "idempotentHint": false,
           "openWorldHint": true,
           "readOnlyHint": false
+        }
+      },
+      {
+        "name": "mkt_list_styles",
+        "title": "List the campaign composer catalog",
+        "description": "AI MARKETING STUDIO. The composer catalog: styles (styleId, image or video, group, name, whether talent or a product is required, default model/ratio/length), hooks (hookId and the opening beat), settings (settingId and the place) and placements (placementId and ratio). Pick from it instead of inventing a look; pass the ids to generate_image / generate_video and mkt_create_variants. Spends no credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            },
+            "mode": {
+              "description": "Optional: image | video - only styles of that kind (hooks and settings are video only).",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            }
+          },
+          "required": [
+            "filmProjectId"
+          ]
+        },
+        "annotations": {
+          "title": "List the campaign composer catalog",
+          "openWorldHint": false,
+          "readOnlyHint": true
         }
       },
       {
@@ -3365,6 +3475,14 @@
             },
             "tool": {
               "description": "Only content made with this AI tool: higgsfield, seedance, kling, veo, sora, hailuo, runway, pixverse, luma, krea, pika, midjourney, wan, vidu. Empty = all tools.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "content": {
+              "description": "'creator' (default), 'brand' (ads by brands - for marketing work) or 'all'.",
               "type": [
                 "string",
                 "null"
@@ -4106,6 +4224,106 @@
         }
       },
       {
+        "name": "mkt_list_channels",
+        "title": "List the workspace's shared channels",
+        "description": "AI MARKETING STUDIO. Instagram and Threads accounts shared with the campaign's workspace (channelId, platform, account, who shared it) and whether publishing is switched on. Use before mkt_draft_post. Spends no credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "filmProjectId"
+          ]
+        },
+        "annotations": {
+          "title": "List the workspace's shared channels",
+          "openWorldHint": false,
+          "readOnlyHint": true
+        }
+      },
+      {
+        "name": "mkt_draft_post",
+        "title": "Draft a campaign post",
+        "description": "AI MARKETING STUDIO. Drafts a post in the campaign calendar: works, format, caption, channels and time. It stays a DRAFT - the team sends it for approval and publishes from the calendar; this tool never publishes. Feed, reel and story take one work, a carousel 2-10, a text post goes to Threads only. Spends no credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            },
+            "caption": {
+              "description": "Caption the audience will read (up to 2200 chars), in the campaign's language.",
+              "type": "string"
+            },
+            "postType": {
+              "description": "feed | reel | story | carousel | text.",
+              "type": "string"
+            },
+            "assetIds": {
+              "description": "assetIds of the works to post.",
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "default": null
+            },
+            "channelIds": {
+              "description": "channelIds from mkt_list_channels; may be empty for a draft.",
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "default": null
+            },
+            "scheduledAt": {
+              "description": "When to post, ISO 8601 with offset, e.g. 2026-10-24T18:00:00+03:00. Optional (tomorrow by default).",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "timezone": {
+              "description": "IANA time zone of the user, e.g. Europe/Moscow. Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            }
+          },
+          "required": [
+            "filmProjectId",
+            "caption",
+            "postType"
+          ]
+        },
+        "annotations": {
+          "title": "Draft a campaign post",
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false,
+          "readOnlyHint": false
+        }
+      },
+      {
         "name": "mira_history",
         "title": "Read a Mira dialog",
         "description": "Returns the last messages of a Mira dialog (user, assistant and generation cards). Empty dialogId = the most recent dialog.",
@@ -4543,6 +4761,28 @@
         }
       },
       {
+        "name": "mkt_get_brand",
+        "title": "Read a campaign's brand kit",
+        "description": "AI MARKETING STUDIO. The campaign's brand kit in full: colours with roles, fonts, tone, what to say and never say, tagline, photography, must include / must avoid, default brand mode. film_get_project already gives a one-line summary; call this when you write copy or a strategy and need the voice in full. The brand is applied to generations by the server - never write the logo or hex codes into prompts. Spends no credits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "filmProjectId"
+          ]
+        },
+        "annotations": {
+          "title": "Read a campaign's brand kit",
+          "openWorldHint": false,
+          "readOnlyHint": true
+        }
+      },
+      {
         "name": "design_voice",
         "title": "Design a new synthetic voice from a description",
         "description": "Creates three preview takes of a brand-new synthetic voice from a text description (age, gender, accent, timbre, pace, character; 20-1000 characters, in English). SPENDS CREDITS (a small flat fee). Let the user listen to the preview_url of each take, then save the chosen one with save_voice - it becomes one of their own voices (list_voices scope 'mine') usable in generate_audio, voiceover_video and change_voice. Never describe or imitate a real, identifiable person. Cloning someone's real voice is not available here: the user can clone their OWN voice only on the Mira website, with a spoken consent check.",
@@ -4924,6 +5164,14 @@
                 "null"
               ],
               "default": null
+            },
+            "filmProjectId": {
+              "description": "Optional AI MARKETING STUDIO campaign (filmProjectId with projectType 'marketing' from film_list_projects): the workspace owner pays instead of the user.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
             }
           },
           "required": [
@@ -5011,6 +5259,115 @@
         }
       },
       {
+        "name": "mkt_script",
+        "title": "Write a Product Link script",
+        "description": "AI MARKETING STUDIO. Product Link script: a short ad script for a product from the brand library (shots, voiceover, caption, hashtags), written in the brand voice. Costs credits (usually 3, paid by the workspace owner) - say so before calling. Then render it with mkt_script_generate.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            },
+            "productElementId": {
+              "description": "Product elementId (film_get_project or film_list_elements).",
+              "type": "string"
+            },
+            "talentElementId": {
+              "description": "Optional talent elementId.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "styleId": {
+              "description": "styleId from mkt_list_styles. Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "hookId": {
+              "description": "hookId from mkt_list_styles. Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "hookText": {
+              "description": "Own opening beat (max 300 chars). Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "settingId": {
+              "description": "settingId from mkt_list_styles. Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "settingText": {
+              "description": "Own place description (max 300 chars). Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "format": {
+              "description": "showcase | review | unboxing | how_to. Optional - the style decides.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "platform": {
+              "description": "tiktok | reels | shorts | youtube.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "durationSeconds": {
+              "description": "Length in seconds, 5-15. Default 10.",
+              "type": [
+                "integer",
+                "null"
+              ],
+              "default": null
+            },
+            "language": {
+              "description": "Language code, e.g. en.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            }
+          },
+          "required": [
+            "filmProjectId",
+            "productElementId"
+          ]
+        },
+        "annotations": {
+          "title": "Write a Product Link script",
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false,
+          "readOnlyHint": false
+        }
+      },
+      {
         "name": "list_direct_presets",
         "title": "List Direct Your Video presets",
         "description": "Lists the DIRECT presets ('Direct Your Video'): ready-made directors that turn a short questionnaire into ONE finished clip up to 30 s - short film, music video, product ad, UGC ad, social post, micro drama, brand film, explainer, film trailer, real-estate tour - plus 'ad-remake', which remakes the user's existing ad with their own product. Each preset carries its questions (`fields`: id, type, label, required, min/max, choice option ids), the allowed durations and ratios and the credit price per duration (`prices`). Call it BEFORE direct_video when the user wants one of those pieces: ask the preset's questions in plain words (required first), quote the price for the chosen length, get a yes, then call direct_video. Free, read-only.",
@@ -5072,29 +5429,6 @@
         }
       },
       {
-        "name": "delete_voice",
-        "title": "Delete one of the user's own voices",
-        "description": "Deletes one of the user's own voices (designed or cloned; list_voices scope 'mine'). Platform voices cannot be deleted. Irreversible - confirm with the user first.",
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "voiceId": {
-              "description": "voice_id of the user's own voice.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "voiceId"
-          ]
-        },
-        "annotations": {
-          "title": "Delete one of the user's own voices",
-          "destructiveHint": true,
-          "openWorldHint": false,
-          "readOnlyHint": false
-        }
-      },
-      {
         "name": "list_my_mira_guides",
         "title": "List the user's own Mira guides",
         "description": "Lists the user's OWN community guides, newest first: id, title, status ('draft'; 'published'; 'unpublished' - taken down by the user; 'removed' - by moderation), whether a published guide has unpublished changes, its public url and its editor link. Use the id with get_mira_guide (working copy), update_mira_guide and publish_mira_guide. Free, read-only.",
@@ -5123,6 +5457,29 @@
           "title": "List the user's own Mira guides",
           "openWorldHint": false,
           "readOnlyHint": true
+        }
+      },
+      {
+        "name": "delete_voice",
+        "title": "Delete one of the user's own voices",
+        "description": "Deletes one of the user's own voices (designed or cloned; list_voices scope 'mine'). Platform voices cannot be deleted. Irreversible - confirm with the user first.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "voiceId": {
+              "description": "voice_id of the user's own voice.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "voiceId"
+          ]
+        },
+        "annotations": {
+          "title": "Delete one of the user's own voices",
+          "destructiveHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": false
         }
       },
       {
@@ -5246,6 +5603,142 @@
           "title": "List the voices for speech and voice change",
           "openWorldHint": false,
           "readOnlyHint": true
+        }
+      },
+      {
+        "name": "mkt_create_variants",
+        "title": "Create an A/B variant set",
+        "description": "AI MARKETING STUDIO. An A/B variant set: one base shot and one or two axes that change (hook, setting, style, talent, product, offer, model), 2-6 values per axis, up to 12 cells. ALWAYS call with dryRun=true first (the default): it returns the cells and the total price paid by the workspace owner; show the price and wait for the user's yes, then call again with dryRun=false. Hook and setting axes are video only; for own hook text use the prefix 'text:'. Results land in the campaign bin.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            },
+            "mode": {
+              "description": "image | video.",
+              "type": "string"
+            },
+            "prompt": {
+              "description": "What every variant shares: the product, the action, the mood.",
+              "type": "string"
+            },
+            "axis1Kind": {
+              "description": "First axis kind: hook | setting | style | talent | product | offer | model.",
+              "type": "string"
+            },
+            "axis1Values": {
+              "description": "First axis values: catalog ids (hookId, settingId, styleId), elementIds, model ids, offer lines, or 'text:your own hook'.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "axis2Kind": {
+              "description": "Optional second axis kind.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "axis2Values": {
+              "description": "Second axis values.",
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "default": null
+            },
+            "name": {
+              "description": "Set name, e.g. 'Launch hooks'. Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "styleId": {
+              "description": "styleId from mkt_list_styles. Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "placementId": {
+              "description": "placementId from mkt_list_styles. Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "model": {
+              "description": "Optional model id; empty = the style's default.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "productElementId": {
+              "description": "Product elementId (film_get_project or film_list_elements), if the product is fixed.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "talentElementIds": {
+              "description": "Talent elementIds fixed across all cells (up to 3).",
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "default": null
+            },
+            "brandMode": {
+              "description": "off | accents | lock (video only). Empty = the campaign default.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "dryRun": {
+              "description": "true (default) - price only; false - start after the user agreed to the price.",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "required": [
+            "filmProjectId",
+            "mode",
+            "prompt",
+            "axis1Kind",
+            "axis1Values"
+          ]
+        },
+        "annotations": {
+          "title": "Create an A/B variant set",
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false,
+          "readOnlyHint": false
         }
       },
       {
@@ -5501,6 +5994,67 @@
         }
       },
       {
+        "name": "mkt_localize",
+        "title": "Localize a campaign video",
+        "description": "AI MARKETING STUDIO. Localizes a finished video: dub into up to 6 languages keeping the voice, dub with lip sync, or captions in the video's own language. ALWAYS dryRun=true first (default), show the price, wait for a yes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            },
+            "assetId": {
+              "description": "assetId of a finished video.",
+              "type": "string"
+            },
+            "mode": {
+              "description": "dub | dub_lipsync | captions.",
+              "type": "string"
+            },
+            "languages": {
+              "description": "ISO 639-1 codes for dub modes, e.g. ['es','de']; empty for captions.",
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "default": null
+            },
+            "captionStyle": {
+              "description": "Captions only: clean | bold.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "dryRun": {
+              "description": "true (default) - price only; false - start after the user agreed to the price.",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "required": [
+            "filmProjectId",
+            "assetId",
+            "mode"
+          ]
+        },
+        "annotations": {
+          "title": "Localize a campaign video",
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false,
+          "readOnlyHint": false
+        }
+      },
+      {
         "name": "rig_3d",
         "title": "Rig a finished 3D character",
         "description": "Adds a humanoid skeleton (Meshy rigging) to a 3D model this account already generated, and optionally bakes animation clips against it. Produces a NEW generation whose first url is the rigged GLB; the rigged FBX and the clips are in files[]. SPENDS CREDITS: 8 for the rig plus 5 per animation clip. The source must be a humanoid with clearly defined limbs, ideally in A-pose or T-pose; props cannot be rigged. A model rigged once is refused with rig_already_done.",
@@ -5740,6 +6294,61 @@
         }
       },
       {
+        "name": "mkt_script_generate",
+        "title": "Render a Product Link script",
+        "description": "AI MARKETING STUDIO. Renders a Product Link script into video takes in the campaign bin. Priced like a video of that model and length (estimate_cost) - say the price and wait for a yes before calling. Follow the takes with film_list_assets.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            },
+            "scriptId": {
+              "description": "scriptId from mkt_script.",
+              "type": "string"
+            },
+            "model": {
+              "description": "Optional model id.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "placementId": {
+              "description": "placementId from mkt_list_styles. Optional.",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "count": {
+              "description": "Takes, 1-4. Default 1.",
+              "type": "integer",
+              "default": 1
+            },
+            "draft": {
+              "description": "true - a cheaper draft render where the model supports it.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": [
+            "filmProjectId",
+            "scriptId"
+          ]
+        },
+        "annotations": {
+          "title": "Render a Product Link script",
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false,
+          "readOnlyHint": false
+        }
+      },
+      {
         "name": "draw_edit_video",
         "title": "Edit one marked area of a clip (Draw to Edit)",
         "description": "Draw to Edit: changes ONE marked area of a clip and keeps everything else - people, motion, camera, timing and sound (Seedance 2.5 edit, one pass, the result has the clip's length). The user marks WHERE on one frame of the clip (brush strokes, arrows, outlines, notes) and says WHAT to change in prompt (start with a verb: replace, remove, add, change). Pass the marked frame as frameImageUrl (a JPEG/PNG of that frame with the marks drawn on it), or the drawing alone as overlayImageUrl (a transparent PNG the size of the frame) - Mira then lays it over the frame at frameSeconds. Both must be uploaded to Mira first (upload_reference_image or create_upload). You cannot draw yourself: ask the user for the marked frame, or describe the area in words in prompt and use the clean frame. referenceImageUrl optionally shows how the new element must look. The clip is a Mira clip (sourceGenerationId) or an upload (libraryItemId) - pass exactly one - 4 to 30 s. Uploaded clips with real people may be refused by the model (moderation_blocked, refunded). SPENDS CREDITS per second of the clip by resolution: 480p 5, 720p (default) 10, 1080p 23 - see estimate_cost kind 'draw_edit' with model = resolution. Returns a new generation_id; call wait_for_generation.",
@@ -5949,6 +6558,59 @@
           "title": "List a film project's cast",
           "openWorldHint": false,
           "readOnlyHint": true
+        }
+      },
+      {
+        "name": "mkt_adapt",
+        "title": "Adapt works to placements",
+        "description": "AI MARKETING STUDIO. Adapts finished works to placements: video is reframed (4:5 via 3:4 plus a crop), images are cropped for free or recomposed. ALWAYS dryRun=true first (default): show the price per placement and wait for a yes, then call with dryRun=false. Up to 4 works and 8 placements.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filmProjectId": {
+              "description": "filmProjectId of an AI Marketing Studio campaign (projectType 'marketing' in film_list_projects).",
+              "type": "string"
+            },
+            "assetIds": {
+              "description": "assetIds of finished works (film_get_project or film_list_assets).",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placementIds": {
+              "description": "placementIds from mkt_list_styles, e.g. reels, ig_feed_portrait, ig_feed_square, youtube.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "imageMode": {
+              "description": "Images only: crop (free, default) | recompose (re-composed for the new frame, priced).",
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "dryRun": {
+              "description": "true (default) - price only; false - start after the user agreed to the price.",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "required": [
+            "filmProjectId",
+            "assetIds",
+            "placementIds"
+          ]
+        },
+        "annotations": {
+          "title": "Adapt works to placements",
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false,
+          "readOnlyHint": false
         }
       }
     ]
