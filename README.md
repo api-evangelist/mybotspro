@@ -64,6 +64,116 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Mybots.pro is a company surfaced as a portfolio company of 500-global and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+myBots (operated by Global AI Group, Inc.) builds enterprise AI sales and support agents for messaging channels — WhatsApp, Instagram, Telegram, LinkedIn and web chat, under the Mia AI product name. Each agent qualifies inbound leads, answers questions from the business's own knowledge base in its brand voice, books appointments on a connected calendar, recommends products from a live catalog, and syncs contacts and deals to HubSpot, Bitrix, Pipedrive, amoCRM or Google Sheets. It is a no-developer SaaS aimed at business teams, priced per message rather than per seat. myBots publishes no developer portal, no API reference and no machine-readable API specification of any kind — no OpenAPI, AsyncAPI, GraphQL SDL, Postman collection, MCP server or A2A agent card exists on any of its hosts. It does run real, reachable API infrastructure behind the product: a live OAuth 2.0 / OpenID Connect authorization server at auth.mybots.pro that serves complete anonymous discovery metadata, a bearer-gated tenant API at client.mybots.pro, and one anonymous public operation at notification.mybots.pro that configures the embeddable web-chat widget. Surfaced as a portfolio company of 500 Global and added to the API Evangelist network.
 
-Backed by: 500-global — https://mybots.pro
+**Areas:** Company · AI Agents · Conversational AI · Messaging · Chatbots · Customer Service · Sales Automation · WhatsApp · Telegram · Instagram · Omnichannel · Lead Qualification
+
+## Mybots.pro on APIs.io
+
+Everything profiled for Mybots.pro is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/mybotspro/](https://apis.io/providers/mybotspro/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [myBots Identity (OAuth 2.0 / OpenID Connect)](https://apis.io/apis/mybotspro/mybots-identity-oauth-20-openid-connect/) — The myBots identity provider, running OpenIddict. This is the only surface in the estate that publishes a complete, anonymous, machine-readable contract:…
+- [myBots Web Chat Public API](https://apis.io/apis/mybotspro/mybots-web-chat-public-api/) — The anonymous configuration API behind the embeddable Mia AI web-chat widget. A single published operation, GET…
+- [myBots Tenant API](https://apis.io/apis/mybotspro/mybots-tenant-api/) — The bearer-gated REST API the Mia AI application calls to operate a tenant's agents, subscription and channels. Confirmed live — /api/Subscribe/program…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [Moved to /providers/mybotspro/](https://apis.io/servers/mybotspro/mybotspro/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Mybotspro Authentication](https://apis.io/security/mybotspro/mybotspro-authentication/)
+- [Mybotspro Domain Security](https://apis.io/security/mybotspro/mybotspro-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Mybotspro Scopes](https://apis.io/scopes/mybotspro/mybotspro-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Mybotspro Plans Pricing](https://apis.io/plans/mybotspro/mybotspro-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Mybotspro Rate Limits](https://apis.io/rate-limits/mybotspro/mybotspro-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://mybots.pro)
+- [Pricing](https://mybots.pro/#pricing)
+- [Blog](https://mybots.pro/blog/)
+- [Terms of service](https://mybots.pro/terms)
+- [Privacy policy](https://mybots.pro/privacy)
+
+## API Evangelist rating
+
+**Kin Score 22.2** — emerging · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.3 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 19.0 |
+| Access clarity | 38.2 |
+
+**Agent readiness 24.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 26.5** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/mybotspro/](https://apis.io/providers/mybotspro/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Mybots.pro: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/mybotspro/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
